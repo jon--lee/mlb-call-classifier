@@ -16,5 +16,6 @@ learning_rate = 0.05
 validation_percentage = .32			# percentage of training set that should be
 									# be used as validation
 
-save_file("results/bucknor.txt")
 
+neuralpy.output(classifier.train(net, uris, epochs, learning_rate, validation_percentage))
+classifier.graph_strikezone(net)

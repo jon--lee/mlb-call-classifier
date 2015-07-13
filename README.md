@@ -6,5 +6,12 @@ Do some umpires tend to call low pitches strikes and high pitches balls?
 This classifier uses neuralpy and MLB GameDay Data to develop a graphical representation of how 
 an umpire sees his or her *unique strikezone.*
 
+Here are some examples. where the blue, `0`, represents the strikezone and red, `1`, represents the area
+outside the strikezone.
 
-### CB Bucknor
+#### CB Bucknor
+Training set: 437 examples: 68% used for training, 32% for test validation
+Hyperparameters: 2-7-1 network with 200 epochs, 0.05 learning rate.
+Accuracy: 94% on test examples
+
+![alt text](bucknor_xml/bucknor-94.png)
