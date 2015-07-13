@@ -23,4 +23,3 @@ validation_percentage = .32
 neuralpy.output(classifier.train(net, uris, epochs, learning_rate, validation_percentage, save_file='results/miller.txt'))
 classifier.graph_strikezone(net)
 
-#grapher.graph(filepath='results/miller-93.txt')
