@@ -14,4 +14,4 @@ Training set: 437 examples: 68% used for training, 32% for test validation
 Hyperparameters: 2-7-1 network with 200 epochs, 0.05 learning rate.
 Accuracy: 94% on test examples
 
-![alt text](bucknor_xml/bucknor-94.png)
+![alt text](results/bucknor-94.png)
