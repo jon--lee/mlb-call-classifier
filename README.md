@@ -18,6 +18,6 @@ Accuracy: 94% on test examples.
 
 #### Bill Miller
 Training set: 516 examples: 68% used for training, 32% for test validation.  
-Hyperparameters: 2-7-1 network with 200 epochs, 0.05 learning rate.
+Hyperparameters: 2-7-1 network with 200 epochs, 0.05 learning rate.  
 Accuracy: 94% on test examples.
 ![](results/miller-94.png)
