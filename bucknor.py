@@ -1,7 +1,12 @@
-# Training classifier for CB Bucknor's strikezone based
-# on game day from 2014 and 2015.
+"""
+Training classifier for CB Bucknor's strikezone based
+on game day from 2014 and 2015.
+"""
 import classifier
 import neuralpy
+import grapher
+
+
 
 net = neuralpy.Network(2, 7, 1)
 uris = [

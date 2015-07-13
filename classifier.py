@@ -17,12 +17,17 @@ rounding_place = 0
 network = None
 
 
-# function for testing the accuracy of the neural network
-# takes the network and the training data (list of tuples fo inputs and outputs)
-# and determines if, after feeding forward the inputs, the network outputs
-# match the expected outputs
 def test(net, data):
+	"""
+	@param net 		network to be tested
+	@param data		list of tuples of input and output vectors.
+					Output must be 1d vector.
 
+	@return 		Returns the number of data where the expected output
+					equals the output of the network given the corresponding input vector.
+
+	
+	"""
 	count = 0
 	for datum in data:
 		inputs = datum[0]
@@ -35,11 +40,19 @@ def test(net, data):
 
 
 
-# @postcondition: 	trains network with accurate weights and biases
-# 					with given arguments (network not returned, object is just modified)
-# @return 			percentage of correct test/verification data (see if it trained correctly)
 def train(net, uris, epochs, learning_rate, validation_percentage, save_file = False):
+	"""
+	@param net 						network to be trained
+	@param uris						uris that the data is parsed from
+	@param epochs					maximum number of iterations
+	@param learning_rate			learing rate
+	@param validation_percentage	percentage of training_set that should be used for validation instead
+	@param save_file				optional filepath to save weights and biases
 
+	@postcondition: 				trains network with accurate weights and biases
+									with given arguments (network not returned, object is just modified)
+	@return 						percentage of correct test/verification data (see if it trained correctly)
+	"""
 
 	pitches = parser.parse(uris)
 
@@ -50,8 +63,10 @@ def train(net, uris, epochs, learning_rate, validation_percentage, save_file = F
 	inputs /= np.std(inputs, axis=0)							# normalizing data
 
 
+
 	training_set = [ (i,o) for i, o in zip(inputs, outputs) ]	# data structure for data according to neuralpy
 	random.shuffle(training_set)								# randomize the training set so not training same things in same order
+	neuralpy.output("len: " + str(len(training_set)))
 
 	cutoff = int(validation_percentage * len(training_set))		# determine the cutoff index
 
@@ -69,21 +84,40 @@ def train(net, uris, epochs, learning_rate, validation_percentage, save_file = F
 	# if there is a save file specified, save the weights
 	# and biases to the file in json format.
 	if save_file:
-		data = {
-			"weights": [w.tolist() for w in net.weights],
-			"biases": [b.tolist() for b in net.biases]
-		}
-		with open(save_file, 'w') as outfile:
-			json.dump(data, outfile)
+		save(save_file, net)
 
 	network = net 															# setting the global variable for reuse
 	return float(count)/len(test_set)
 
 
-# graph the strikezone with the given network or global network
-# creates data points all around the strikezone (to demonstrate balls as well)
-# also normalizes and zeroes the data
+def save(filepath, net):
+	"""
+	@param filepath		filepath of the out file
+	@param net 			network to be saved
+
+	@postcondition		network layers, biases, and weights written in json
+						to the output file.
+	"""
+
+	data = {
+		"weights": [w.tolist() for w in net.weights],
+		"biases": [b.tolist() for b in net.biases],
+		"layers": net.layers
+	}
+	with open(filepath, 'w') as outfile:
+		json.dump(data, outfile)
+
+
+
+
 def graph_strikezone(net):
+	"""
+	@param net 			network to be tested
+
+	@postcondition 		graph the strikezone with the given network or global network
+						creates data points all around the strikezone (to demonstrate balls as well)
+						also normalizes and zeroes the data
+	"""
 
 	increment = .01
 	xs = np.arange(-1.8, 1.8, increment)
@@ -116,7 +150,7 @@ def graph_strikezone(net):
 
 	cs = plt.pcolor(xs, zs, c)
 	plt.axis([xs.min(), xs.max(), zs.min(), zs.max()])
-	plt.xlabel("distance from middle (ft) \n from catcher\'s perspective")
+	plt.xlabel("distance from middle of plate, catcher's perspective (ft)")
 	plt.ylabel("height (ft)")
 	cb = plt.colorbar(cs)
 	

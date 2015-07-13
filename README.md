@@ -8,9 +8,18 @@ This classifier uses a supervised machine learning algorithm with `neuralpy` and
 Here are some examples. where the blue, `0`, represents the strikezone and red, `1`, represents the area
 outside the strikezone.
 
+Average heights of bottom and tops of strike zone: http://www.baseballprospectus.com/article.php?articleid=14098
+
 #### CB Bucknor
 Training set: 437 examples: 68% used for training, 32% for test validation.  
 Hyperparameters: 2-7-1 network with 200 epochs, 0.05 learning rate.  
 Accuracy: 94% on test examples.
 
 ![](results/bucknor-94.png)
+
+#### Bill Miller
+Training set: 516 examples: 68% used for training, 32% for test validation.  
+Hyperparameters: 2-7-1 network with 200 epochs, 0.05 learning rate.
+Accuracy: 94% on test examples.
+
+![](results/miller-94.png)
