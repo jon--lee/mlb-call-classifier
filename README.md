@@ -11,13 +11,14 @@ outside the strikezone.
 Average heights of bottom and tops of strike zone: http://www.baseballprospectus.com/article.php?articleid=14098
 
 #### CB Bucknor
-Training set: 437 examples: 68% used for training, 32% for test validation.  
-Hyperparameters: 2-7-1 network with 200 epochs, 0.05 learning rate.  
-Accuracy: 94% on test examples.
-![](results/bucknor-94.png)
+###### Right-handed Batter
+Training set: 920 examples: 68% used for training, 32% for test validation.  
+Hyperparameters: 2-7-1 network with 200 epochs, 0.05 learning rate, 60% mini-batch size.  
+Accuracy: 93% on test examples. Best of ten.
+![](results/bucknor-93-R.png)
 
-#### Bill Miller
-Training set: 516 examples: 68% used for training, 32% for test validation.  
-Hyperparameters: 2-7-1 network with 200 epochs, 0.05 learning rate.  
-Accuracy: 94% on test examples.
-![](results/miller-94.png)
+###### Left-handed Batter
+Training set: 759 examples: 68% used for training, 32% for test validation.  
+Hyperparameters: 2-7-1 network with 200 epochs, 0.05 learning rate, 60% mini-batch size.  
+Accuracy: 95% on test examples. Best of ten.
+![](results/bucknor-95-L.png)

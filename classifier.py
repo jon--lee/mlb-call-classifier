@@ -16,6 +16,8 @@ rounding_place = 0
 # global network variable that is assigned in the train method
 network = None
 
+# side of the plate that the batter stands on (by default it is right)
+stand = "R"
 
 def test(net, data):
 	"""
@@ -54,7 +56,7 @@ def train(net, uris, epochs, learning_rate, validation_percentage, save_file = F
 	@return 						percentage of correct test/verification data (see if it trained correctly)
 	"""
 
-	pitches = parser.parse(uris)
+	pitches = parser.parse(uris, stand)
 
 	inputs = np.array([ [pitch[0], pitch[1]] for pitch in pitches ])
 	outputs = np.array([ [pitch[2]] for pitch in pitches ])
@@ -73,8 +75,9 @@ def train(net, uris, epochs, learning_rate, validation_percentage, save_file = F
 	test_set = training_set[:cutoff]							# fraction of all data that is test set
 	training_set = training_set[cutoff:]						# training set being cut down to other fraction
 
+	batch_length = int(.6 * len(training_set))
 
-	net.train(training_set, epochs, learning_rate, monitor_cost=True)
+	net.train(training_set, epochs, learning_rate, batch_length=batch_length, monitor_cost=True)
 
 
 	# count = test(net, training_set)										# getting number of correct examples in training set
