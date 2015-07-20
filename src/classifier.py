@@ -41,7 +41,6 @@ def test(net, data):
 	return count
 
 
-
 def train(net, uris, epochs, learning_rate, validation_percentage, save_file = False):
 	"""
 	@param net 						network to be trained
@@ -55,14 +54,20 @@ def train(net, uris, epochs, learning_rate, validation_percentage, save_file = F
 									with given arguments (network not returned, object is just modified)
 	@return 						percentage of correct test/verification data (see if it trained correctly)
 	"""
+	global net
+	global mean
+	global std
 
 	pitches = parser.parse(uris, stand)
 
 	inputs = np.array([ [pitch[0], pitch[1]] for pitch in pitches ])
 	outputs = np.array([ [pitch[2]] for pitch in pitches ])
 
-	inputs -= np.mean(inputs, axis=0)							# zeroing data
-	inputs /= np.std(inputs, axis=0)							# normalizing data
+	mean = np.mean(inputs, axis=0)
+	std = np.std(inputs, axis=0)
+
+	inputs -= mean												# zeroing data
+	inputs /= std 												# normalizing data
 
 
 
@@ -105,7 +110,7 @@ def save(filepath, net):
 	data = {
 		"weights": [w.tolist() for w in net.weights],
 		"biases": [b.tolist() for b in net.biases],
-		"layers": net.layers
+		"layers": net.layers,
 	}
 	with open(filepath, 'w') as outfile:
 		json.dump(data, outfile)
@@ -123,33 +128,35 @@ def graph_strikezone(net):
 	"""
 
 	increment = .01
-	xs = np.arange(-1.8, 1.8, increment)
+	x_edge = 1.8
+	z_edge = 3.9
+
+	xs = np.arange(-x_edge, x_edge, increment)
 	xs -= np.mean(xs)
 	xs /= np.std(xs)
 
-	zs = np.arange(0, 3.9, increment)
+	zs = np.arange(0, z_edge, increment)
 	zs -= np.mean(zs)
 	zs /= np.std(zs)
 
-	c = np.zeros((len(zs), len(xs))).tolist()					# here is the matrix of zeros
-																# rows represent the z and columns
-																# represent the x
-																# in the matrix, (x,y) is given as
-																# [y][x]
 
-	# c = np.array([[ [i, j] for i in xs] for j in zs ])
-	#c = np.array([[ [i, j] for j in zs] for i in xs ])
+	c = np.zeros((len(xs), len(zs)))
+
+	for i, ival in enumerate(xs):
+		for j, jval in enumerate(zs):
+			c[i][j] = round(net.feedforward([ival, jval])[0], rounding_place)
 
 
-	for i, ival in enumerate(zs):
-		for j, jval in enumerate(xs):
-			c[i][j] = round( net.feedforward([jval,ival])[0], rounding_place )
+	# matplotlab plots matrices by a (y, x) as if rows
+	# are the y and columns are the x, so we must transpose
+	c = c.transpose()
 
-	c = np.array(c)
-	c.transpose()
+	
+	# zone = find_zone(increment, x_edge, len(xs), z_edge, len(zs))
 
-	xs = np.arange(-1.8, 1.8, increment)
-	zs = np.arange(0, 3.9, increment)
+
+	xs = np.arange(-x_edge, x_edge, increment)
+	zs = np.arange(0, z_edge, increment)
 
 	cs = plt.pcolor(xs, zs, c)
 	plt.axis([xs.min(), xs.max(), zs.min(), zs.max()])
@@ -159,3 +166,25 @@ def graph_strikezone(net):
 	
 	plt.show()
 
+
+# def find_zone(increment, x_edge, x_len, z_edge, z_len):
+# 	"""
+# 	Determine the indices of the edges of the strike zone
+# 	average height of top of strikezone is 3.5 ft
+# 	average height of bottom of strikezone is 1.5ft
+
+# 	@param increment		increment used for range
+# 	@param x_edge			in feet, the distance from the middle of
+# 								home plate to the edge of the view (assuming middle 
+# 								of plate is middle of view as well)
+# 	@param x_len			total length of the array of x values
+# 	@param z_edge			in feet, the top of the view assuming 0 is the bottom
+# 	@param z_len			total length of the z values
+# 	"""
+# 	z_scale = (z_len - 1) / z_edge			# (array len / feet)
+
+# 	zone_top = z_scale * 3.5				# (array len / feet) * feet
+# 	zone_bottom = z_scale * 1.5				# (array len / feet) * feet
+
+# 	print zone_top
+# 	print zone_bottom
